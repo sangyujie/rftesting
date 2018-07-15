@@ -1,0 +1,21 @@
+*** Settings ***
+Documentation     项目级
+
+*** Variables ***
+${IP}             192.168.233.128
+
+*** Keywords ***
+setup
+    log    预置条件
+    Connect To Database    pymysql    scott    tester    passwd    ${IP}    3306
+    ...    utf8    #连接数据库
+    OperatingSystem.Run    taskkill /f /im chromedriver.exe    #杀遗留的driver进程
+    log    1.打开网站
+    Open Browser    http://${IP}/mt    chrome
+    Maximize Browser Window
+    Set Global Variable    ${xx}    abc    #全局变量
+
+teardown
+    log    恢复环境
+    Disconnect From Database    #释放数据库连接资源
+    Close Browser

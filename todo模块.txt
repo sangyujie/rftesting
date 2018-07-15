@@ -1,0 +1,70 @@
+*** Settings ***
+Suite Setup       setup
+Suite Teardown    teardown
+Test Setup        case_setup_t    todo    userinfo
+Resource          mtres.txt
+Library           SeleniumLibrary
+Library           OperatingSystem
+Library           DatabaseLibrary
+Variables         lib/var.py
+
+*** Test Cases ***
+case-t01
+    [Template]    tpl_userinfo
+    :FOR    ${i}    in    @{DATA_TODO_CASE_t01}
+    \    ${i[0]}    ${i[1]}    ${i[2]}    ${i[3]}    ${i[4]}    ${i[5]}
+
+case-t02
+    [Template]    tpl_userinfo
+    1    2    3    1@1.com    1
+
+*** Keywords ***
+tpl_userinfo
+    [Arguments]    ${firstName}    ${lastName}    ${userName}    ${email}    ${password}    ${inputName}
+    ${x}    Row Count    select * from scott.userinfo where user_name='${userName} ';
+    ${y}    Evaluate    str($x+1)
+    log    2、点击接口测试课程
+    Click Link    接口测试课程
+    Wait Until Element Is Visible    link=点击..
+    log    3、点击注册
+    Click Link    点击..
+    log    4、输入注册用户名和密码
+    Input Text    id=firstName    ${firstName}
+    Input Text    id=lastName    ${lastName}
+    Input Text    id=userName    ${userName}
+    Input Text    id=email    ${email}
+    Input Text    id=password    ${password}
+    log    5、点击提交
+    Click Button    Sign Up
+    Wait Until Keyword Succeeds    30    1    Check If Exists In Database    select * from scott.userinfo where user_name='${userName}';
+    log    6、确认注册成功
+    log    6.1页面显示注册成功提示
+    Check If Exists In Database    select * from scott.userinfo where user_name='${userName}';
+    Page Should Contain    \ \ \ User \ registered successfully
+    log    6.2数据表中有此数据
+    Row Count Is Equal To X    select * from scott.userinfo where user_name='${userName}';    ${y}
+    log    7、点击click here登录
+    Click Link    Click here..
+    log    8、输入注册成功的用户名和密码
+    Input Text    id=j_username    ${userName}
+    Input Text    id=j_password    ${password}
+    log    9、点击登录
+    Click Button    登录
+    log    10、确认登录成功
+    Page Should Contain    Logout
+    log    11、添加todo用户名
+    Input Text    id=inputName    ${inputName}
+    log    12、添加优先级
+    Select From List By Label    id=priority    MEDIUM
+    Log    13、选择日期
+    Click Element    class=icon-calendar
+    Click Button    Today
+    Click Button    Close
+    log    14、点击add todo
+    Click Element    css=body > div.container > div:nth-child(3) > div.control-group.ng-scope > form > div:nth-child(4) > div > button
+    sleep    5
+
+case_setup_t
+    [Arguments]    ${todo}    ${userinfo}
+    Execute Sql String    delete from ${todo} ;
+    Execute Sql String    delete from ${userinfo} ;

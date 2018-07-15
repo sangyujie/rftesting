@@ -1,0 +1,45 @@
+*** Settings ***
+Suite Setup
+Library           CSVLibrary
+Library           ExcelLibrary
+Library           lib/py.py
+Variables         lib/var.py
+
+*** Test Cases ***
+case-h01
+    log    helloworld
+    ${x}    Set Variable    100    #设置变量x的值为字符串100
+    ${y}    Set Variable    ${100}    #设置变量y的值为数值100
+    log    ${x}
+    ${l}    Create List    a    b    #['a','b']    #${l} = [u'a', u'b'] u表示字符集
+    : FOR    ${i}    IN    @{l}
+    \    log    ${i}
+    ${d}    Create Dictionary    china=zhongguo    usa=meiguo    #字典
+    log    ${d['china']}
+    Run Keyword If    $x=='100'    log    ok    #判断
+    Run Keyword If    $y==100    log    no
+    Should Be Equal    ${x}    100
+
+case-h02
+    ${x}    Set Variable    ${3}
+    ${y}    Evaluate    $x+1    #计算sql数据行数+1
+    log    ${CURDIR}${/}mtres.txt    #内置的变量,mtres.txt文件的路径
+    log    ${TEST_NAME}    #用例名
+    log    %{PATH}    #环境变量
+
+case-csv
+    ${x}    Read Csv File To List    ${CURDIR}${/}testdata${/}data.csv
+    ${x}    Read Csv File To Associative    ${CURDIR}${/}testdata${/}data.csv
+
+case-excel
+    Open Excel    ${CURDIR}${/}testdata${/}data.xls
+    Add New Sheet    Sheet4
+    Save Excel    c:/data.xls
+    ${x}    Get Column Count    Sheet1    #列数
+    ${x}    Get Row Count    Sheet1    #行数
+    ${x}    Get Number Of Sheets
+
+case-py
+    ${x}    Get Curdir
+    log    ${CASE}
+    log    ${MODULE}
