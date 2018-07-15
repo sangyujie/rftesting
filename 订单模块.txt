@@ -189,34 +189,6 @@ case05
     sleep    5
     Set Selenium Implicit Wait    0    #隐式等待时间,控制浏览器在定位失败时返回的相应时间
 
-case06
-    [Documentation]    xxx购物车基本功能
-    [Tags]
-    log    2.点击自动化测试课程
-    Comment    Click Element    jquery=a:contains('自动化')
-    Click Element    link=自动化测试课程
-    log    3.输入购买名称及数量
-    Input Text    ProductName    mobile
-    Input Text    Quantity    100
-    Comment    Execute Javascript    $('#ProductName').val('mobile')
-    Comment    Execute Javascript    $('#Quantity').val('100')
-    log    4.点击提交
-    Click Element    submitBtn
-    log    5.确认提交成功
-    log    5.1确认前端提示信息正确
-    Page Should Contain    你购买了mobile，一共100件。
-    ${x}    Get Text    id=msg    #检查方式2
-    Should Be Equal    ${x}    你购买了mobile，一共100件。
-    log    5.2确认前端购物车信息正确
-    Select Frame    id=fra    #进入frame/iframe,带个参数定位符
-    Select From List By Label    id=buy    产品:mobile,数量:100    #使用不变的元素来处理select下拉列表
-
-case07
-    [Documentation]    调用模板参数化
-    [Template]    tpl_order
-    苹果    100
-    apple    200
-
 *** Keywords ***
 case_setup_o
     [Documentation]    用例
@@ -269,6 +241,7 @@ tpl_order
     Wait Until Element Is Visible    name=payfor
     Select From List By Label    id=bank    农业银行    #选择付款银行
     Input Text    id=cardno    123456789
+    sleep    2
     Click Element    name=payfor    #点击付款按钮
     Handle Alert    accept    #处理alert弹出框
     Execute Sql String    delete from order_item where name='${pname}' and quantity='${quan}';    #清理脏数据
