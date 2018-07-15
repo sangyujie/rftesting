@@ -1,4 +1,4 @@
-*** Settings ***
+﻿*** Settings ***
 Suite Setup       setup
 Suite Teardown    teardown
 Test Setup        case_setup_t    todo    userinfo
@@ -51,6 +51,7 @@ tpl_userinfo
     log    9、点击登录
     Click Button    登录
     log    10、确认登录成功
+    sleep    2
     Page Should Contain    Logout
     log    11、添加todo用户名
     Input Text    id=inputName    ${inputName}
