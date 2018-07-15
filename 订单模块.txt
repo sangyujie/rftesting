@@ -1,4 +1,4 @@
-*** Settings ***
+﻿*** Settings ***
 Suite Setup       setup
 Suite Teardown    teardown
 Test Setup        case_setup_o
@@ -235,7 +235,7 @@ tpl_order
     ${x}    Get Window Handles    #获得窗口的句柄
     Select Window    ${x[-1]}    #处理没有title的窗口
     Maximize Browser Window
-    sleep    2
+    sleep    5
     log    8.输入银行卡号，完成付款
     sleep    2
     Wait Until Element Is Visible    name=payfor
