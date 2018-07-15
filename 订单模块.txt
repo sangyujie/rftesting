@@ -194,14 +194,14 @@ case06
     [Tags]
     log    2.点击自动化测试课程
     Comment    Click Element    jquery=a:contains('自动化')
-    Click Element    jquery=[href='#/downloads']
+    Click Element    link=自动化测试课程
     log    3.输入购买名称及数量
-    Input Text    jquery=#ProductName    mobile
-    Input Text    jquery=[id='Quantity']    100
+    Input Text    ProductName    mobile
+    Input Text    Quantity    100
     Comment    Execute Javascript    $('#ProductName').val('mobile')
     Comment    Execute Javascript    $('#Quantity').val('100')
     log    4.点击提交
-    Click Element    jquery=#submitBtn
+    Click Element    submitBtn
     log    5.确认提交成功
     log    5.1确认前端提示信息正确
     Page Should Contain    你购买了mobile，一共100件。
@@ -214,7 +214,7 @@ case06
 case07
     [Documentation]    调用模板参数化
     [Template]    tpl_order
-    苹果    100    #参数化
+    苹果    100
     apple    200
 
 *** Keywords ***
@@ -243,6 +243,7 @@ tpl_order
     Click Element    id=submitBtn
     log    5.确认提交成功
     log    5.1确认前端提示信息正确
+    sleep    2
     Page Should Contain    你购买了${pname}，一共${quan}件。
     ${x}    Get Text    id=msg    #检查方式2
     Should Be Equal    ${x}    你购买了${pname}，一共${quan}件。
@@ -264,6 +265,7 @@ tpl_order
     Maximize Browser Window
     sleep    2
     log    8.输入银行卡号，完成付款
+    sleep    2
     Wait Until Element Is Visible    name=payfor
     Select From List By Label    id=bank    农业银行    #选择付款银行
     Input Text    id=cardno    123456789
